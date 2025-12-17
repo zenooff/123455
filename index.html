@@ -15,6 +15,7 @@
             justify-content: center;
             align-items: center;
             font-family: Arial, sans-serif;
+            color: white;
         }
 
         /* Texte centré */
@@ -23,6 +24,7 @@
             font-size: 5rem;
             z-index: 10;
             position: relative;
+            margin-bottom: 20px;
         }
 
         /* Canvas pour les étoiles */
@@ -31,24 +33,96 @@
             top: 0;
             left: 0;
         }
+
+        /* Conteneur des formulaires */
+        .form-container {
+            position: relative;
+            z-index: 10;
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 30px;
+            border-radius: 10px;
+            width: 300px;
+            box-sizing: border-box;
+            text-align: center;
+        }
+
+        /* Styles des formulaires */
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        input[type="text"], input[type="password"], input[type="email"] {
+            padding: 10px;
+            border-radius: 5px;
+            border: none;
+            outline: none;
+            font-size: 1rem;
+        }
+
+        button {
+            padding: 10px;
+            border-radius: 5px;
+            border: none;
+            background-color: violet;
+            color: white;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background-color: #9b30ff;
+        }
+
+        /* Liens pour changer de formulaire */
+        .toggle-link {
+            color: violet;
+            cursor: pointer;
+            text-decoration: underline;
+            font-size: 0.9rem;
+        }
+
+        /* Masquer le formulaire d'inscription au départ */
+        #registerForm {
+            display: none;
+        }
     </style>
 </head>
 <body>
-    <h1>ZENO</h1>
     <canvas id="stars"></canvas>
+    <div class="form-container">
+        <h1>ZENO</h1>
+
+        <!-- Formulaire de connexion -->
+        <form id="loginForm">
+            <input type="email" placeholder="Email" required>
+            <input type="password" placeholder="Mot de passe" required>
+            <button type="submit">Se connecter</button>
+            <p>Pas de compte ? <span class="toggle-link" onclick="toggleForms()">S'inscrire</span></p>
+        </form>
+
+        <!-- Formulaire d'inscription -->
+        <form id="registerForm">
+            <input type="text" placeholder="Nom complet" required>
+            <input type="email" placeholder="Email" required>
+            <input type="password" placeholder="Mot de passe" required>
+            <button type="submit">S'inscrire</button>
+            <p>Déjà un compte ? <span class="toggle-link" onclick="toggleForms()">Se connecter</span></p>
+        </form>
+    </div>
 
     <script>
         const canvas = document.getElementById('stars');
         const ctx = canvas.getContext('2d');
 
-        // Redimensionnement du canvas
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
 
         const stars = [];
         const numStars = 200;
 
-        // Création des étoiles
         for (let i = 0; i < numStars; i++) {
             stars.push({
                 x: Math.random() * canvas.width,
@@ -67,7 +141,6 @@
                 ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
                 ctx.fill();
 
-                // Animation : défilement vertical
                 star.y -= star.speed;
                 if (star.y < 0) star.y = canvas.height;
             }
@@ -77,10 +150,33 @@
 
         drawStars();
 
-        // Ajuster le canvas si la fenêtre change de taille
         window.addEventListener('resize', () => {
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
+        });
+
+        // Fonction pour basculer entre login et inscription
+        function toggleForms() {
+            const loginForm = document.getElementById('loginForm');
+            const registerForm = document.getElementById('registerForm');
+            if (loginForm.style.display === "none") {
+                loginForm.style.display = "flex";
+                registerForm.style.display = "none";
+            } else {
+                loginForm.style.display = "none";
+                registerForm.style.display = "flex";
+            }
+        }
+
+        // Éviter le rechargement de la page lors de la soumission
+        document.getElementById('loginForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            alert("Connexion réussie (simulation) !");
+        });
+
+        document.getElementById('registerForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            alert("Inscription réussie (simulation) !");
         });
     </script>
 </body>
